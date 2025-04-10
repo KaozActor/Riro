@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>???</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            background-color: #fafafa;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #6a5acd;
+            margin-bottom: 20px;
+        }
+
+        #char-image {
+            max-width: 300px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        #dialog {
+            margin: 20px auto;
+            font-size: 1.2em;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 80%;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #6a5acd;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #574bde;
+        }
+
+        #next-button {
+            display: none;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #777;
+            opacity: 0.1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <img id="char-image" src="fotos/branco.png" alt="Personagem">
+    <div id="dialog">Clique em "Próximo" para iniciar o diálogo!</div>
+    <button id="next-button">Próximo</button>
+    <button id="music-button">Reproduzir Música</button> 
+
+    <footer>
+        <p>© 2025 ???</p>
+    </footer>
+
+    <script>
+        // Objeto que contém os diálogos pré-definidos
+        const dialogues = [
+            {
+                text: "Bela tentativa, mas está no local errado.",
+                image: "fotos/branco.png",
+                audio: null
+            },
+            {
+                text: "Parabéns, você encontrou o final secreto!",
+                image: "fotos/branco.png",
+                audio: null
+            },
+            // Adicione mais diálogos aqui
+        ];
+
+        let currentDialogueIndex = 0;
+
+        document.getElementById("next-button").addEventListener("click", function () {
+            if (currentDialogueIndex < dialogues.length) {
+                const dialogue = dialogues[currentDialogueIndex];
+                typeDialogue(dialogue.text, dialogue.audio);
+                currentDialogueIndex++;
+            } else {
+                // Quando terminar os diálogos, reinicia
+                currentDialogueIndex = 0;
+                document.getElementById("dialog").innerHTML = "Clique em 'Próximo' para iniciar o diálogo!";
+                document.getElementById("char-image").src = "assets/imagens/personagem1.png"; // Imagem inicial
+                document.getElementById("next-button").style.display = "none"; // Oculta o botão
+            }
+        });
+
+        function typeDialogue(text, audioSrc) {
+            document.getElementById("dialog").innerHTML = ""; // Limpa o diálogo atual
+            let index = 0;
+            const typingSpeed = 35; // Velocidade de digitação em milissegundos
+
+            // Toca o áudio do diálogo, se disponível
+            if (audioSrc) {
+                const audio = new Audio(audioSrc);
+                audio.play();
+            }
+
+            function typeCharacter() {
+                if (index < text.length) {
+                    document.getElementById("dialog").innerHTML += text.charAt(index);
+                    index++;
+                    setTimeout(typeCharacter, typingSpeed);
+                } else {
+                    document.getElementById("next-button").style.display = "inline"; // Mostra o botão "Próximo" após terminar a digitação
+                }
+            }
+
+            typeCharacter();  // Inicia a digitação
+            document.getElementById("char-image").src = dialogues[currentDialogueIndex].image; // Troca de imagem
+        }
+
+        // Inicializa o botão "Próximo" invisível
+        document.getElementById("next-button").style.display = "none";
+
+        // Inicialização do áudio da música de fundo
+        const musicAudio = document.createElement('audio');
+        musicAudio.src = 'assets/audios/música-de-fundo.mp3';
+        musicAudio.loop = true;
+        document.body.appendChild(musicAudio);
+
+        // Controle de música
+        let musicPlaying = false;
+
+        document.getElementById("music-button").addEventListener("click", function() {
+            if (musicPlaying) {
+                musicAudio.pause();
+                this.textContent = "Reproduzir Música"; // Muda o texto do botão
+            } else {
+                musicAudio.play();
+                this.textContent = "Pausar Música"; // Muda o texto do botão
+            }
+            musicPlaying = !musicPlaying; // Alterna o estado
+        });
+
+        // Exibe o botão "Próximo" após o primeiro clique
+        document.getElementById("next-button").style.display = "inline";
+    </script>
+</body>
+</html>
