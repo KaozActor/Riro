@@ -38,13 +38,32 @@
 
         .gallery-item img, .gallery-item video {
             width: 100%;
-            height: 100%; /* Alterado para ocupar completamente a altura */
-            object-fit: cover; /* Ajusta o modo como a imagem/vídeo se ajusta ao contêiner */
+            height: auto;
             display: block;
+            cursor: pointer; /* Cursor de ponteiro ao passar sobre a imagem */
         }
 
         .gallery-item:hover {
             transform: scale(1.05); /* Aumenta ao passar o mouse */
+        }
+
+        /* Estilo para a lightbox */
+        .lightbox {
+            display: none; /* Oculta por padrão */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
         }
 
         footer {
@@ -61,22 +80,22 @@
     <h1>Galeria de Fotos e Vídeos</h1>
     <div class="gallery-container">
         <div class="gallery-item">
-            <img src="fotos/1.jpg" alt="Descrição da imagem 1">
+            <img src="fotos/1.jpg" alt="Descrição da imagem 1" onclick="openLightbox(this.src);">
         </div>
         <div class="gallery-item">
-            <img src="fotos/2.jpg" alt="Descrição da imagem 2">
+            <img src="fotos/2.jpg" alt="Descrição da imagem 2" onclick="openLightbox(this.src);">
         </div>
         <div class="gallery-item">
-            <img src="fotos/3.jpg" alt="Descrição da imagem 3">
+            <img src="fotos/3.jpg" alt="Descrição da imagem 3" onclick="openLightbox(this.src);">
         </div>
         <div class="gallery-item">
-            <img src="fotos/4.jpg" alt="Descrição da imagem 4">
+            <img src="fotos/4.jpg" alt="Descrição da imagem 4" onclick="openLightbox(this.src);">
         </div>
         <div class="gallery-item">
-            <img src="fotos/5.jpg" alt="Descrição da imagem 5">
+            <img src="fotos/5.jpg" alt="Descrição da imagem 5" onclick="openLightbox(this.src);">
         </div>
         <div class="gallery-item">
-            <img src="fotos/6.jpg" alt="Descrição da imagem 6">
+            <img src="fotos/6.jpg" alt="Descrição da imagem 6" onclick="openLightbox(this.src);">
         </div>
         <div class="gallery-item">
             <video controls>
@@ -93,9 +112,27 @@
         <!-- Adicione mais itens de vídeo ou imagem aqui -->
     </div>
 
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <img id="lightboxImage" src="">
+    </div>
+
     <footer>
         <p>© 2025 Todos os direitos reservados.</p>
     </footer>
+
+    <script>
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightboxImage');
+            lightboxImage.src = src;
+            lightbox.style.display = 'flex'; // Mostra a lightbox
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.style.display = 'none'; // Oculta a lightbox
+        }
+    </script>
 
 </body>
 </html>
