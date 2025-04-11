@@ -38,7 +38,8 @@
 
         .gallery-item img, .gallery-item video {
             width: 100%;
-            height: auto;
+            height: 100%; /* Alterado para ocupar completamente a altura */
+            object-fit: cover; /* Ajusta o modo como a imagem/vídeo se ajusta ao contêiner */
             display: block;
         }
 
