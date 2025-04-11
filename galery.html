@@ -13,18 +13,21 @@
             padding: 20px;
             margin: 0;
         }
+
         h1 {
             color: #6a5acd;
             text-align: center;
             margin-bottom: 20px;
             font-size: 2.5em;
         }
+
         .gallery-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px; /* Espaco entre as imagens */
+            gap: 15px; /* Espaço entre as imagens */
             margin: 20px 0;
         }
+
         .gallery-item {
             position: relative;
             overflow: hidden;
@@ -32,14 +35,17 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
         }
-        .gallery-item img {
+
+        .gallery-item img, .gallery-item video {
             width: 100%;
             height: auto;
             display: block;
         }
+
         .gallery-item:hover {
-            transform: scale(1.05); /* Aumenta a imagem ao passar o mouse */
+            transform: scale(1.05); /* Aumenta ao passar o mouse */
         }
+
         footer {
             margin-top: 20px;
             font-size: 0.9em;
@@ -51,7 +57,7 @@
 </head>
 <body>
 
-    <h1>Galeria de Fotos</h1>
+    <h1>Galeria de Fotos e Vídeos</h1>
     <div class="gallery-container">
         <div class="gallery-item">
             <img src="fotos/1.jpg" alt="Descrição da imagem 1">
@@ -71,7 +77,19 @@
         <div class="gallery-item">
             <img src="fotos/6.jpg" alt="Descrição da imagem 6">
         </div>
-        <!-- Adicione mais itens aqui -->
+        <div class="gallery-item">
+            <video controls>
+                <source src="videos/video1.mp4" type="video/mp4">
+                Seu navegador não suporta o vídeo.
+            </video>
+        </div>
+        <div class="gallery-item">
+            <video controls>
+                <source src="videos/video2.mp4" type="video/mp4">
+                Seu navegador não suporta o vídeo.
+            </video>
+        </div>
+        <!-- Adicione mais itens de vídeo ou imagem aqui -->
     </div>
 
     <footer>
