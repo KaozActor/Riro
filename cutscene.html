@@ -12,6 +12,7 @@
             background-color: #fafafa;
             color: #333;
             padding: 20px;
+            overflow: hidden; /* Impede a barra de rolagem do scrollbar do body */
         }
 
         h1 {
@@ -63,6 +64,30 @@
             color: #777;
             opacity: 0.3;
         }
+
+        /* Estilo para os créditos */
+        #credits {
+            position: fixed; /* Fixa os créditos na tela */
+            bottom: 0; /* Começa no fundo da tela */
+            left: 50%; /* Centraliza horizontalmente */
+            transform: translateX(-50%); /* Ajusta a centralização */
+            font-size: 1.5em; /* Tamanho do texto dos créditos */
+            color: #6a5acd; /* Cor do texto dos créditos */
+            opacity: 0; /* Inicialmente invisível */
+            animation: scroll 15s linear forwards; /* Animação de scroll */
+            white-space: nowrap; /* Impede quebra de linha */
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(-50%) translateY(100%); /* Começa fora da tela */
+                opacity: 0; /* Começa invisível */
+            }
+            100% {
+                transform: translateX(-50%) translateY(-100%); /* Move para fora da tela para cima */
+                opacity: 1; /* Fica visível ao longo da animação */
+            }
+        }
     </style>
 </head>
 
@@ -76,6 +101,8 @@
     <footer>
         <p>© 2025 ???</p>
     </footer>
+
+    <div id="credits">Agradecimentos: Desenvolvedor, Música: Artista, Imagens: Autor, etc.</div>
 
     <script>
         // Objeto que contém os diálogos pré-definidos
@@ -97,17 +124,17 @@
             },
             {
                 text: "2?: Bem, eu acho que você venceu desta vez...",
-                image: "foto/branco.png",
+                image: "fotos/branco.png", // Corrigido para o caminho correto da imagem
                 audio: 'audios/fala1.mp3'
             },
             {
                 text: "1?: Essa batalha era inútil ao meu ver, mas graças a ela pude descobrir coisas novas",
-                image: "foto/branco.png",
+                image: "fotos/branco.png", // Corrigido para o caminho correto da imagem
                 audio: 'audios/fala2.mp3'
             },
             {
                 text: "1?: Agora quero saber mais sobre meu passado",
-                image: "foto/branco.png",
+                image: "fotos/branco.png", // Corrigido para o caminho correto da imagem
                 audio: 'audios/fala3.mp3'
             },
             {
@@ -135,6 +162,11 @@
                 image: "fotos/Sumiuthi.png",
                 audio: 'audios/plot2.mp3'
             },
+            {
+                text: "[Narrador]",
+                image: "fotos/Sumiuthi.png",
+                audio: 'audios/narrador.mp3'
+            },
             // Adicione mais diálogos aqui
         ];
 
@@ -146,11 +178,8 @@
                 typeDialogue(dialogue.text, dialogue.audio);
                 currentDialogueIndex++;
             } else {
-                // Quando terminar os diálogos, reinicia
-                currentDialogueIndex = 0;
-                document.getElementById("dialog").innerHTML = "Clique em 'Próximo' para iniciar o diálogo!";
-                document.getElementById("char-image").src = "assets/imagens/personagem1.png"; // Imagem inicial
-                document.getElementById("next-button").style.display = "none"; // Oculta o botão
+                // Quando terminar os diálogos, inicia a rolagem de créditos
+                startCredits();
             }
         });
 
@@ -179,6 +208,12 @@
             document.getElementById("char-image").src = dialogues[currentDialogueIndex].image; // Troca de imagem
         }
 
+        function startCredits() {
+            document.getElementById("dialog").style.display = "none"; // Oculta o diálogo
+            document.getElementById("next-button").style.display = "none"; // Oculta o botão "Próximo"
+            document.getElementById("credits").style.opacity = "1"; // Torna a div de créditos visível
+        }
+
         // Inicializa o botão "Próximo" invisível
         document.getElementById("next-button").style.display = "none";
 
@@ -202,9 +237,6 @@
             }
             musicPlaying = !musicPlaying; // Alterna o estado
         });
-
-        // Exibe o botão "Próximo" após o primeiro clique
-        document.getElementById("next-button").style.display = "inline";
     </script>
 </body>
 </html>
