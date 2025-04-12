@@ -107,6 +107,53 @@
     </footer>
 
     <script>
+        // Função para carregar os links do localStorage
+        function loadLinks() {
+            const links = JSON.parse(localStorage.getItem('links')) || [];
+            links.forEach(function(link) {
+                addLink(link.title, link.url); // Adiciona cada link
+            });
+        }
+
+        // Função para adicionar um novo link
+        function addLink(title, url) {
+            const linksList = document.getElementById("links-list");
+            const linkItem = document.createElement("div");
+            linkItem.className = "link-item";
+
+            linkItem.innerHTML = `
+                <a href="${url}" target="_blank" rel="noopener noreferrer">${title}</a>
+                <button onclick="removeLink(this)">Remover</button>
+            `;
+
+            linksList.appendChild(linkItem);
+            saveLinksToLocalStorage(); // Salva a lista atualizada
+        }
+
+        // Função para salvar os links no localStorage
+        function saveLinksToLocalStorage() {
+            const links = [];
+            document.querySelectorAll('.link-item').forEach(item => {
+                const link = {
+                    title: item.querySelector('a').textContent,
+                    url: item.querySelector('a').href
+                };
+                links.push(link);
+            });
+            localStorage.setItem('links', JSON.stringify(links)); // Converte para JSON e salva
+        }
+
+        // Função para remover um link
+        function removeLink(button) {
+            const linkItem = button.parentElement; // Pega o link-item pai
+            linkItem.remove(); // Remove o link-item
+            saveLinksToLocalStorage(); // Salva a lista atualizada
+        }
+
+        // Ao carregar a página, carrega os links previamente salvos
+        window.onload = loadLinks;
+
+        // Adiciona evento ao botão de adicionar link
         document.getElementById("add-link-button").addEventListener("click", function() {
             const linkTitle = document.getElementById("link-title").value.trim();
             const linkUrl = document.getElementById("link-url").value.trim();
@@ -119,24 +166,6 @@
                 alert("Por favor, preencha todos os campos.");
             }
         });
-
-        function addLink(title, url) {
-            const linksList = document.getElementById("links-list");
-            const linkItem = document.createElement("div");
-            linkItem.className = "link-item";
-
-            linkItem.innerHTML = `
-                <a href="${url}" target="_blank" rel="noopener noreferrer">${title}</a>
-                <button onclick="removeLink(this)">Remover</button>
-            `;
-
-            linksList.appendChild(linkItem);
-        }
-
-        function removeLink(button) {
-            const linkItem = button.parentElement; // Pega o link-item pai
-            linkItem.remove(); // Remove o link-item
-        }
     </script>
 </body>
 </html>
