@@ -1,1 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Pessoal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            background-color: #fafafa;
+            color: #333;
+            padding: 20px;
+            overflow-x: hidden; /* Impede o scroll horizontal */
+        }
 
+        h1 {
+            color: #6a5acd;
+            text-align: center;
+        }
+
+        .input-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        input[type="text"], input[type="url"] {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 5px;
+            width: 60%;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #6a5acd;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #574bde;
+        }
+
+        #links-list {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .link-item {
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 80%;
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .link-item a {
+            text-decoration: none;
+            color: #6a5acd;
+        }
+
+        .link-item button {
+            background-color: #ff4c4c; /* Cor do botão de remover */
+        }
+
+        .link-item button:hover {
+            background-color: #ff0000; /* Cor do botão de remover ao passar o mouse */
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            text-align: center;
+            color: #777;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Guia Pessoal</h1>
+    <div class="input-container">
+        <input type="text" id="link-title" placeholder="Título do Link" required>
+        <input type="url" id="link-url" placeholder="URL do Link" required>
+        <button id="add-link-button">Adicionar Link</button>
+    </div>
+
+    <div id="links-list"></div>
+
+    <footer>
+        <p>© 2025 Guia Pessoal</p>
+    </footer>
+
+    <script>
+        document.getElementById("add-link-button").addEventListener("click", function() {
+            const linkTitle = document.getElementById("link-title").value.trim();
+            const linkUrl = document.getElementById("link-url").value.trim();
+
+            if (linkTitle && linkUrl) {
+                addLink(linkTitle, linkUrl);
+                document.getElementById("link-title").value = ''; // Limpa o campo
+                document.getElementById("link-url").value = ''; // Limpa o campo
+            } else {
+                alert("Por favor, preencha todos os campos.");
+            }
+        });
+
+        function addLink(title, url) {
+            const linksList = document.getElementById("links-list");
+            const linkItem = document.createElement("div");
+            linkItem.className = "link-item";
+
+            linkItem.innerHTML = `
+                <a href="${url}" target="_blank" rel="noopener noreferrer">${title}</a>
+                <button onclick="removeLink(this)">Remover</button>
+            `;
+
+            linksList.appendChild(linkItem);
+        }
+
+        function removeLink(button) {
+            const linkItem = button.parentElement; // Pega o link-item pai
+            linkItem.remove(); // Remove o link-item
+        }
+    </script>
+</body>
+</html>
