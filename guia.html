@@ -107,12 +107,22 @@
     </footer>
 
     <script>
+        // Links predefinidos
+        const predefinedLinks = [
+            { title: "Desenho", url: "https://kaozactor.github.io/Riro/guia/desenho.html" },
+            { title: "Software", url: "https://www.blackmagicdesign.com/products/davinciresolve/" },
+            { title: "Jogos", url: "https://steamunlocked.net/" },
+            { title: "Wikipedia", url: "https://www.wikipedia.org" }
+        ];
+
         // Função para carregar os links do localStorage
         function loadLinks() {
             const links = JSON.parse(localStorage.getItem('links')) || [];
-            links.forEach(function(link) {
-                addLink(link.title, link.url); // Adiciona cada link
-            });
+            if (links.length === 0) {
+                predefinedLinks.forEach(link => addLink(link.title, link.url)); // Adiciona links predefinidos
+            } else {
+                links.forEach(link => addLink(link.title, link.url)); // Adiciona links salvos
+            }
         }
 
         // Função para adicionar um novo link
@@ -150,7 +160,7 @@
             saveLinksToLocalStorage(); // Salva a lista atualizada
         }
 
-        // Ao carregar a página, carrega os links previamente salvos
+        // Ao carregar a página, carrega os links previamente salvos ou predefinidos
         window.onload = loadLinks;
 
         // Adiciona evento ao botão de adicionar link
