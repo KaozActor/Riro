@@ -41,8 +41,8 @@
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
             display: block;
-            margin-left: auto;  
-            margin-right: auto; 
+            margin-left: auto;
+            margin-right: auto;
         }
 
         #dialog {
@@ -73,13 +73,13 @@
         }
 
         #next-button, #auto-button {
-            display: inline; 
+            display: inline;
         }
 
         #credits {
             margin-top: 20px;
             color: #f0f0f0;
-            display: none; 
+            display: none;
         }
 
         footer {
@@ -96,15 +96,16 @@
     <div id="loading-screen">Carregando...</div>
     
     <select id="mode-selector">
+        <option value="">Escolha um Modo</option>
         <option value="manual">Modo Manual</option>
         <option value="automatic">Modo Automático</option>
     </select>
 
     <img id="char-image" src="fotos/branco.gif" alt="Personagem" style="display:none;">
-    <div id="dialog">Clique em "Próximo" quando estiver pronto...</div>
-    <button id="next-button">Próximo</button>
+    <div id="dialog">Escolha um modo para iniciar...</div>
+    <button id="next-button" style="display: none;">Próximo</button>
     <button id="auto-button" style="display: none;">Próximo Automático</button>
-    <button id="music-button">Reproduzir Música</button>
+    <button id="music-button" style="display: none;">Reproduzir Música</button>
     <button id="credits-button" style="display:none;">Ver Créditos</button>
     <div id="credits">
         <h2>Créditos</h2>
@@ -178,7 +179,7 @@
             if (imagesLoaded === images.length && audiosLoaded === audioFiles.length) {
                 document.getElementById('loading-screen').style.display = 'none'; // Oculta a tela de carregamento
                 document.getElementById('char-image').style.display = 'block'; // Exibe a imagem
-                startDialogue();
+                document.getElementById("mode-selector").style.display = "block"; // Exibe o seletor de modo
             }
         }
 
@@ -202,52 +203,41 @@
         let isAutomaticMode = false;
         let dialogueTimeout;
 
-        function startDialogue() {
-            document.getElementById("next-button").addEventListener("click", () => advanceDialogue(false));
-            document.getElementById("auto-button").addEventListener("click", () => advanceDialogue(true));
-
-            // Adiciona um listener para o modo selecionado
-            document.getElementById("mode-selector").addEventListener("change", function () {
+        // Listener para o modo selecionado
+        document.getElementById("mode-selector").addEventListener("change", function () {
+            if (this.value) {
                 isAutomaticMode = this.value === "automatic"; // Atualiza o modo
-                updateButtons();
-            });
-
-            updateButtons();
-            advanceDialogue(true); // Inicia com o diálogo, no modo selecionado
-        }
-
-        function updateButtons() {
-            const nextButton = document.getElementById("next-button");
-            const autoButton = document.getElementById("auto-button");
-
-            if (isAutomaticMode) {
-                nextButton.style.display = "none"; // Oculta o botão "Próximo"
-                autoButton.style.display = "inline"; // Exibe o botão "Próximo Automático"
-            } else {
-                nextButton.style.display = "inline"; // Exibe o botão "Próximo"
-                autoButton.style.display = "none"; // Oculta o botão "Próximo Automático"
+                startDialogue();
+                // Se o modo automático for selecionado, comece a tocar música
+                if (isAutomaticMode) {
+                    playMusic(); // Chama a função playMusic
+                }
             }
+        });
+
+        function startDialogue() {
+            document.getElementById("next-button").style.display = "inline"; // Exibe o botão "Próximo"
+            document.getElementById("auto-button").style.display = "inline"; // Exibe o botão "Próximo Automático"
+            document.getElementById("music-button").style.display = "inline"; // Exibe o botão de música
+            advanceDialogue(false); // Inicia no modo manual
         }
 
         function advanceDialogue(isAuto) {
             if (currentDialogueIndex < dialogues.length) {
                 const dialogue = dialogues[currentDialogueIndex];
                 typeDialogue(dialogue.text, dialogue.audio);
-
-                // Passa para o próximo diálogo após o áudio, adicionando tempo de espera se estiver no modo automático
                 const audio = new Audio(dialogue.audio);
                 audio.play();
                 audio.onended = () => {
                     if (isAuto) {
                         dialogueTimeout = setTimeout(() => {
                             currentDialogueIndex++;
-                            advanceDialogue(true); // Chama automaticamente
-                        }, 2000); // 2 segundos após o fim do áudio
+                            advanceDialogue(true);
+                        }, 1000); // Pausa de 1 segundo após o fim do áudio
                     } else {
                         currentDialogueIndex++;
                     }
                 };
-                
                 document.getElementById("char-image").src = dialogue.image; // Troca de imagem
                 if (!isAuto) {
                     document.getElementById("next-button").style.display = "none"; // Oculta o botão após a interação manual
@@ -295,23 +285,30 @@
         musicAudio.volume = 0.2;
         document.body.appendChild(musicAudio);
 
+        function playMusic() {
+            if (!musicPlaying) {
+                musicAudio.play();
+                musicPlaying = true; // Marca a música como tocando
+            }
+        }
+
         document.getElementById("music-button").addEventListener("click", function() {
             if (musicPlaying) {
                 musicAudio.pause();
                 this.textContent = "Reproduzir Música";
+                musicPlaying = false; // Marca a música como pausada
             } else {
-                musicAudio.play();
-                this.textContent = "Pausar Música";
+                playMusic(); // Começa a tocar música
+                this.textContent = "Pausar Música"; // Atualiza o texto do botão
             }
-            musicPlaying = !musicPlaying;
         });
 
         document.getElementById("credits-button").addEventListener("click", function() {
-            document.getElementById("credits").style.display = "block";
+            document.getElementById("credits").style.display = "block"; // Mostra os créditos
         });
 
         document.getElementById("close-credits").addEventListener("click", function() {
-            document.getElementById("credits").style.display = "none";
+            document.getElementById("credits").style.display = "none"; // Oculta os créditos
         });
     </script>
 </body>
