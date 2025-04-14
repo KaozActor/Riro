@@ -9,11 +9,17 @@
         body {
             font-family: 'Roboto', sans-serif;
             text-align: center;
+            display: flex; /* Usamos flexbox para centralização */
+            flex-direction: column; /* Direção em coluna */
+            justify-content: center; /* Alinhamento vertical */
+            align-items: center; /* Alinhamento horizontal */
+            min-height: 100vh; /* Preencher a altura da viewport */
+            margin: 0; /* Remover margens */
             background-color: #1c1c1c; /* Cor de fundo escura */
             color: #f0f0f0; /* Cor do texto clara */
             padding: 20px;
         }
-  
+
         #loading-screen {
             position: fixed;
             top: 0;
@@ -34,6 +40,9 @@
             margin-bottom: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            display: block; /* Garante que a imagem não use float */
+            margin-left: auto;  
+            margin-right: auto; 
         }
 
         #dialog {
@@ -93,7 +102,7 @@
     <button id="credits-button" style="display:none;">Ver Créditos</button>
     <div id="credits">
         <h2>Créditos</h2>
-        <p>Noriver: Thiago Esdras(Legumi)</p>
+        <p>Noriver: Thiago Esdras (Legumi)</p>
         <p>Sumiuthi: Koto</p>
         <p>Narrador: Hilbert</p>
         <p>Desenvolvedor: Kaoz</p>
@@ -228,6 +237,12 @@
         }
 
         let musicPlaying = false;
+        const musicAudio = document.createElement('audio');
+        musicAudio.src = 'audios/música-de-fundo.mp3';
+        musicAudio.loop = true;
+        musicAudio.volume = 0.2;
+        document.body.appendChild(musicAudio); // Adiciona o elemento de áudio ao body
+
         document.getElementById("music-button").addEventListener("click", function() {
             if (musicPlaying) {
                 musicAudio.pause();
