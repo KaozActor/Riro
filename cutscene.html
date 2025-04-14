@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>???</title>
+    <title>Diálogo Interativo</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -74,77 +74,24 @@
     <button id="music-button">Reproduzir Música</button> 
 
     <footer>
-        <p>© 2025 ???</p>
+        <p>© 2025 Seu Nome</p>
     </footer>
 
     <script>
-        // Objeto que contém os diálogos pré-definidos
         const dialogues = [
-            {
-                text: "[Passos]",
-                image: "fotos/branco.png",
-                audio: 'audios/passos.mp3'
-            },
-            {
-                text: "[...]",
-                image: "fotos/branco.png",
-                audio: 'audios/sangue.mp3'
-            },
-            {
-                text: "1?: É o fim",
-                image: "fotos/branco.png",
-                audio: 'audios/fala0.mp3'
-            },
-            {
-                text: "2?: Bem, eu acho que você venceu desta vez...",
-                image: "foto/branco.png",
-                audio: 'audios/fala1.mp3'
-            },
-            {
-                text: "1?: Essa batalha era inútil ao meu ver, mas graças a ela pude descobrir coisas novas",
-                image: "foto/branco.png",
-                audio: 'audios/fala2.mp3'
-            },
-            {
-                text: "1?: Agora quero saber mais sobre meu passado",
-                image: "foto/branco.png",
-                audio: 'audios/fala3.mp3'
-            },
-            {
-                text: "2?: Passado... Eu sei onde você pode procurar",
-                image: "fotos/branco.png",
-                audio: 'audios/fala4.mp3'
-            },
-            {
-                text: "2?: Em algum lugar da Europa existe uma seita ligada a você... ",
-                image: "fotos/branco.png",
-                audio: 'audios/fala5.mp3'
-            },
-            {
-                text: "2?: Agora... faça o que bem entender...",
-                image: "fotos/branco.png",
-                audio: 'audios/fala6.mp3'
-            },
-                text: "[...]",
-                image: "fotos/branco.png",
-                audio: 'audios/morte.mp3'
-            },
-            {
-                text: "1?: Certo então, SENTINELA DO INVERNO...",
-                image: "fotos/branco.png",
-                audio: 'audios/plot.mp3'
-            },
-            {
-                text: "E então, por onde começamos, Hades?",
-                image: "fotos/Sumiuthi.png",
-                audio: 'audios/plot2.mp3'
-            },
-            {
-                text: "[Narrador]",
-                image: "fotos/Sumiuthi.png",
-                audio: 'audios/narrador.mp3'
-            },
-            // Adicione mais diálogos aqui
+            { text: "[Passos]", image: "fotos/branco.png", audio: 'audios/passos.mp3' },
+            { text: "[...]", image: "fotos/branco.png", audio: 'audios/sangue.mp3' },
+            { text: "1?: É o fim", image: "fotos/branco.png", audio: 'audios/fala0.mp3' },
+            { text: "2?: Bem, eu acho que você venceu desta vez...", image: "fotos/branco.png", audio: 'audios/fala1.mp3' },
+            { text: "1?: Essa batalha era inútil ao meu ver, mas graças a ela pude descobrir coisas novas", image: "fotos/branco.png", audio: 'audios/fala2.mp3' },
+            { text: "1?: Agora quero saber mais sobre meu passado", image: "fotos/branco.png", audio: 'audios/fala3.mp3' },
+            { text: "2?: Passado... Eu sei onde você pode procurar", image: "fotos/branco.png", audio: 'audios/fala4.mp3' },
+            { text: "2?: Em algum lugar da Europa existe uma seita ligada a você...", image: "fotos/branco.png", audio: 'audios/fala5.mp3' },
+            { text: "2?: Agora... faça o que bem entender...", image: "fotos/branco.png", audio: 'audios/fala6.mp3' },
+            { text: "[...]", image: "fotos/branco.png", audio: 'audios/morte.mp3' },
+            { text: "1?: Certo então, SENTINELA DO INVERNO...", image: "fotos/branco.png", audio: 'audios/plot.mp3' },
+            { text: "E então, por onde começamos, Hades?", image: "fotos/Sumiuthi.png", audio: 'audios/plot2.mp3' },
+            { text: "[Narrador]", image: "fotos/Sumiuthi.png", audio: 'audios/narrador.mp3' }
         ];
 
         let currentDialogueIndex = 0;
@@ -155,10 +102,9 @@
                 typeDialogue(dialogue.text, dialogue.audio);
                 currentDialogueIndex++;
             } else {
-                // Quando terminar os diálogos, reinicia
                 currentDialogueIndex = 0;
                 document.getElementById("dialog").innerHTML = "Clique em 'Próximo' para iniciar o diálogo!";
-                document.getElementById("char-image").src = "assets/imagens/personagem1.png"; // Imagem inicial
+                document.getElementById("char-image").src = "fotos/branco.png"; // Imagem inicial
                 document.getElementById("next-button").style.display = "none"; // Oculta o botão
             }
         });
@@ -168,7 +114,6 @@
             let index = 0;
             const typingSpeed = 44; // Velocidade de digitação em milissegundos
 
-            // Toca o áudio do diálogo, se disponível
             if (audioSrc) {
                 const audio = new Audio(audioSrc);
                 audio.play();
@@ -184,21 +129,16 @@
                 }
             }
 
-            typeCharacter();  // Inicia a digitação
+            typeCharacter();
             document.getElementById("char-image").src = dialogues[currentDialogueIndex].image; // Troca de imagem
         }
 
-        // Inicializa o botão "Próximo" invisível
-        document.getElementById("next-button").style.display = "none";
-
-        // Inicialização do áudio da música de fundo
         const musicAudio = document.createElement('audio');
         musicAudio.src = 'audios/música-de-fundo.mp3';
         musicAudio.loop = true;
         musicAudio.volume = 0.2;
         document.body.appendChild(musicAudio);
 
-        // Controle de música
         let musicPlaying = false;
 
         document.getElementById("music-button").addEventListener("click", function() {
@@ -212,8 +152,7 @@
             musicPlaying = !musicPlaying; // Alterna o estado
         });
 
-        // Exibe o botão "Próximo" após o primeiro clique
-        document.getElementById("next-button").style.display = "inline";
+        document.getElementById("next-button").style.display = "inline"; // Exibe o botão inicial, caso necessário
     </script>
 </body>
 </html>
