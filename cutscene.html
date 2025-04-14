@@ -13,6 +13,21 @@
             color: #f0f0f0; /* Cor do texto clara */
             padding: 20px;
         }
+  
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Fundo escuro semi-translúcido */
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            z-index: 1000; /* Fica acima de tudo */
+        }
 
         #char-image {
             max-width: 300px;
@@ -69,7 +84,9 @@
 
 <body>
 
-    <img id="char-image" src="fotos/branco.gif" alt="Personagem">
+    <div id="loading-screen">Carregando...</div> <!-- Tela de carregamento -->
+    
+    <img id="char-image" src="fotos/branco.gif" alt="Personagem" style="display:none;"> <!-- Inicialmente escondido -->
     <div id="dialog">Clique em "Próximo" quando estiver pronto...</div>
     <button id="next-button">Próximo</button>
     <button id="music-button">Reproduzir Música</button>
@@ -89,6 +106,67 @@
     </footer>
 
     <script>
+        const images = [
+            "fotos/branco.gif",
+            "fotos/Sumiuthi.png",
+            "fotos/SumiuthiH.png"
+        ];
+
+        const audioFiles = [
+            'audios/passos.mp3',
+            'audios/sangue.mp3',
+            'audios/fala0.mp3',
+            'audios/fala1.mp3',
+            'audios/fala2.mp3',
+            'audios/fala3.mp3',
+            'audios/fala4.mp3',
+            'audios/fala5.mp3',
+            'audios/fala6.mp3',
+            'audios/morte.mp3',
+            'audios/plot.mp3',
+            'audios/plot2.mp3',
+            'audios/narrador.mp3',
+            'audios/música-de-fundo.mp3'
+        ];
+
+        let imagesLoaded = 0;
+        let audiosLoaded = 0;
+
+        // Pré-carrega as imagens
+        images.forEach((src) => {
+            const img = new Image();
+            img.src = src;
+            img.onload = () => {
+                imagesLoaded++;
+                checkLoadingComplete();
+            };
+            img.onerror = () => {
+                imagesLoaded++;
+                checkLoadingComplete();
+            };
+        });
+
+        // Pré-carrega os áudios
+        audioFiles.forEach((src) => {
+            const audio = new Audio(src);
+            audio.onloadeddata = () => {
+                audiosLoaded++;
+                checkLoadingComplete();
+            };
+            audio.onerror = () => {
+                audiosLoaded++;
+                checkLoadingComplete();
+            };
+        });
+
+        function checkLoadingComplete() {
+            if (imagesLoaded === images.length && audiosLoaded === audioFiles.length) {
+                document.getElementById('loading-screen').style.display = 'none'; // Oculta a tela de carregamento
+                document.getElementById('char-image').style.display = 'block'; // Exibe a imagem
+                startDialogue();
+            }
+        }
+
         const dialogues = [
             { text: "[Passos]", image: "fotos/branco.gif", audio: 'audios/passos.mp3' },
             { text: "[...]", image: "fotos/branco.gif", audio: 'audios/sangue.mp3' },
@@ -107,21 +185,23 @@
 
         let currentDialogueIndex = 0;
 
-        document.getElementById("next-button").addEventListener("click", function () {
-            if (currentDialogueIndex < dialogues.length) {
-                const dialogue = dialogues[currentDialogueIndex];
-                typeDialogue(dialogue.text, dialogue.audio);
-                currentDialogueIndex++;
-            } else {
-                currentDialogueIndex = 0;
-                document.getElementById("dialog").innerHTML = "Feliz aniversário Riro!!";
-                document.getElementById("char-image").src = "fotos/Sumiuthi.png"; // Imagem inicial
-                document.getElementById("next-button").style.display = "none"; // Oculta o botão
+        function startDialogue() {
+            document.getElementById("next-button").addEventListener("click", function () {
+                if (currentDialogueIndex < dialogues.length) {
+                    const dialogue = dialogues[currentDialogueIndex];
+                    typeDialogue(dialogue.text, dialogue.audio);
+                    currentDialogueIndex++;
+                } else {
+                    currentDialogueIndex = 0;
+                    document.getElementById("dialog").innerHTML = "Feliz aniversário Riro!!";
+                    document.getElementById("char-image").src = "fotos/Sumiuthi.png"; // Imagem inicial
+                    document.getElementById("next-button").style.display = "none"; // Oculta o botão
 
-                // Mostra o botão de créditos
-                document.getElementById("credits-button").style.display = "inline";
-            }
-        });
+                    // Mostra o botão de créditos
+                    document.getElementById("credits-button").style.display = "inline";
+                }
+            });
+        }
 
         function typeDialogue(text, audioSrc) {
             document.getElementById("dialog").innerHTML = ""; // Limpa o diálogo atual
@@ -147,14 +227,7 @@
             document.getElementById("char-image").src = dialogues[currentDialogueIndex].image; // Troca de imagem
         }
 
-        const musicAudio = document.createElement('audio');
-        musicAudio.src = 'audios/música-de-fundo.mp3';
-        musicAudio.loop = true;
-        musicAudio.volume = 0.2;
-        document.body.appendChild(musicAudio);
-
         let musicPlaying = false;
-
         document.getElementById("music-button").addEventListener("click", function() {
             if (musicPlaying) {
                 musicAudio.pause();
