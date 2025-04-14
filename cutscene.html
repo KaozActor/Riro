@@ -9,8 +9,8 @@
         body {
             font-family: 'Roboto', sans-serif;
             text-align: center;
-            background-color: #fafafa;
-            color: #333;
+            background-color: #1c1c1c; /* Cor de fundo escura */
+            color: #f0f0f0; /* Cor do texto clara */
             padding: 20px;
         }
 
@@ -23,7 +23,7 @@
             max-width: 300px;
             margin-bottom: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Sombra mais escura */
         }
 
         #dialog {
@@ -32,8 +32,8 @@
             padding: 15px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            background-color: #fff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: #2a2a2a; /* Fundo do diálogo mais escuro */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Sombra mais escura */
             max-width: 80%;
         }
 
@@ -63,6 +63,11 @@
             color: #777;
             opacity: 0.3;
         }
+
+        #credits {
+            margin-top: 20px;
+            color: #f0f0f0;
+        }
     </style>
 </head>
 
@@ -72,6 +77,14 @@
     <div id="dialog">Clique em "Próximo" para iniciar o diálogo!</div>
     <button id="next-button">Próximo</button>
     <button id="music-button">Reproduzir Música</button> 
+    <button id="credits-button" style="display:none;">Ver Créditos</button>
+    <div id="credits" style="display:none;">
+        <h2>Créditos</h2>
+        <p>Jogador: Seu Nome</p>
+        <p>Desenvolvedor: Seu Nome</p>
+        <p>Artista: Seu Nome</p>
+        <button id="close-credits">Fechar Créditos</button>
+    </div>
 
     <footer>
         <p>© 2025 Seu Nome</p>
@@ -102,10 +115,14 @@
                 typeDialogue(dialogue.text, dialogue.audio);
                 currentDialogueIndex++;
             } else {
+                // Ao finalizar o diálogo
                 currentDialogueIndex = 0;
                 document.getElementById("dialog").innerHTML = "Clique em 'Próximo' para iniciar o diálogo!";
                 document.getElementById("char-image").src = "fotos/branco.png"; // Imagem inicial
                 document.getElementById("next-button").style.display = "none"; // Oculta o botão
+
+                // Mostra o botão de créditos
+                document.getElementById("credits-button").style.display = "inline";
             }
         });
 
@@ -152,7 +169,15 @@
             musicPlaying = !musicPlaying; // Alterna o estado
         });
 
-        document.getElementById("next-button").style.display = "inline"; // Exibe o botão inicial, caso necessário
+        // Função para mostrar créditos
+        document.getElementById("credits-button").addEventListener("click", function() {
+            document.getElementById("credits").style.display = "block"; // Mostra os créditos
+        });
+
+        // Função para fechar os créditos
+        document.getElementById("close-credits").addEventListener("click", function() {
+            document.getElementById("credits").style.display = "none"; // Oculta os créditos
+        });
     </script>
 </body>
 </html>
