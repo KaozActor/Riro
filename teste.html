@@ -73,13 +73,13 @@
         }
 
         #next-button, #auto-button {
-            display: inline;
+            display: none; /* Inicialmente oculto */
         }
 
         #credits {
             margin-top: 20px;
             color: #f0f0f0;
-            display: none;
+            display: none; 
         }
 
         footer {
@@ -103,8 +103,8 @@
 
     <img id="char-image" src="fotos/branco.gif" alt="Personagem" style="display:none;">
     <div id="dialog">Escolha um modo para iniciar...</div>
-    <button id="next-button" style="display: none;">Próximo</button>
-    <button id="auto-button" style="display: none;">Próximo Automático</button>
+    <button id="next-button">Próximo</button>
+    <button id="auto-button">Próximo Automático</button>
     <button id="music-button" style="display: none;">Reproduzir Música</button>
     <button id="credits-button" style="display:none;">Ver Créditos</button>
     <div id="credits">
@@ -148,7 +148,6 @@
         let imagesLoaded = 0;
         let audiosLoaded = 0;
 
-        // Pré-carrega as imagens
         images.forEach((src) => {
             const img = new Image();
             img.src = src;
@@ -162,7 +161,6 @@
             };
         });
 
-        // Pré-carrega os áudios
         audioFiles.forEach((src) => {
             const audio = new Audio(src);
             audio.onloadeddata = () => {
@@ -203,22 +201,19 @@
         let isAutomaticMode = false;
         let dialogueTimeout;
 
-        // Listener para o modo selecionado
         document.getElementById("mode-selector").addEventListener("change", function () {
             if (this.value) {
                 isAutomaticMode = this.value === "automatic"; // Atualiza o modo
                 startDialogue();
-                // Se o modo automático for selecionado, comece a tocar música
-                if (isAutomaticMode) {
-                    playMusic(); // Chama a função playMusic
-                }
             }
         });
 
         function startDialogue() {
             document.getElementById("next-button").style.display = "inline"; // Exibe o botão "Próximo"
             document.getElementById("auto-button").style.display = "inline"; // Exibe o botão "Próximo Automático"
-            document.getElementById("music-button").style.display = "inline"; // Exibe o botão de música
+            document.getElementById("music-button").style.display = isAutomaticMode ? "inline" : "none"; // Exibe o botão de música no modo automático
+
+            currentDialogueIndex = 0; // Reinicia o índice de diálogo
             advanceDialogue(false); // Inicia no modo manual
         }
 
@@ -228,6 +223,7 @@
                 typeDialogue(dialogue.text, dialogue.audio);
                 const audio = new Audio(dialogue.audio);
                 audio.play();
+
                 audio.onended = () => {
                     if (isAuto) {
                         dialogueTimeout = setTimeout(() => {
@@ -235,12 +231,13 @@
                             advanceDialogue(true);
                         }, 1000); // Pausa de 1 segundo após o fim do áudio
                     } else {
-                        currentDialogueIndex++;
+                        currentDialogueIndex++; // Avança o diálogo para o próximo
                     }
                 };
+
                 document.getElementById("char-image").src = dialogue.image; // Troca de imagem
                 if (!isAuto) {
-                    document.getElementById("next-button").style.display = "none"; // Oculta o botão após a interação manual
+                    document.getElementById("next-button").style.display = "none"; // Oculta o botão "Próximo" após a interação manual
                 }
             } else {
                 resetDialogue(); // Reseta para o início após o fim dos diálogos
@@ -248,8 +245,8 @@
         }
 
         function resetDialogue() {
-            currentDialogueIndex = 0;
-            document.getElementById("dialog").innerHTML = "Feliz aniversário Riro!!";
+            currentDialogueIndex = 0; // Reinicia o índice de diálogo
+            document.getElementById("dialog").innerHTML = "Feliz aniversário Riro!!"; // Mensagem de conclusão
             document.getElementById("char-image").src = "fotos/Sumiuthi.png"; // Imagem inicial
             document.getElementById("next-button").style.display = "none"; // Oculta o botão
             document.getElementById("auto-button").style.display = "none"; // Oculta o botão automático
@@ -296,7 +293,6 @@
             if (musicPlaying) {
                 musicAudio.pause();
                 this.textContent = "Reproduzir Música";
-                musicPlaying = false; // Marca a música como pausada
             } else {
                 playMusic(); // Começa a tocar música
                 this.textContent = "Pausar Música"; // Atualiza o texto do botão
